@@ -98,11 +98,11 @@ export default function HomeScreen({navigation}) {
             label="Remember me"
           />
           <Button
-            type="submit"
+            // type="submit"
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
+            // className={classes.submit}
             onClick={ ()=> navigation.navigate('Dashboard') }
           >
             Sign In
