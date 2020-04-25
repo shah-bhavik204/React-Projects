@@ -9,59 +9,74 @@ import { createStackNavigator } from '@react-navigation/stack';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
 
+//Screens
+import Dashboard from './screens/Dashboard'
+import HomeScreen from './screens/HomeScreen'
+import Product from './screens/Product'
+
 const Stack = createStackNavigator();
 
 export default function App(props) {
-  const [isLoadingComplete, setLoadingComplete] = React.useState(false);
-  const [initialNavigationState, setInitialNavigationState] = React.useState();
-  const containerRef = React.useRef();
-  const { getInitialState } = useLinking(containerRef);
-
-  // Load any resources or data that we need prior to rendering the app
-  React.useEffect(() => {
-    async function loadResourcesAndDataAsync() {
-      try {
-        SplashScreen.preventAutoHide();
-
-        // Load our initial navigation state
-        setInitialNavigationState(await getInitialState());
-
-        // Load fonts
-        await Font.loadAsync({
-          ...Ionicons.font,
-          'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
-        });
-      } catch (e) {
-        // We might want to provide this error information to an error reporting service
-        console.warn(e);
-      } finally {
-        setLoadingComplete(true);
-        SplashScreen.hide();
-      }
-    }
-
-    loadResourcesAndDataAsync();
-  }, []);
-
-  if (!isLoadingComplete && !props.skipLoadingScreen) {
-    return null;
-  } else {
-    return (
-      <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
-          <Stack.Navigator>
-            <Stack.Screen name="Root" component={BottomTabNavigator} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </View>
-    );
-  }
+  return ( 
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="HomeScreen" component={HomeScreen}/>
+        <Stack.Screen name="Dashboard" component={Dashboard}/>
+        <Stack.Screen name="Product" component={Product}/>
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
 }
+//   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
+//   const [initialNavigationState, setInitialNavigationState] = React.useState();
+//   const containerRef = React.useRef();
+//   const { getInitialState } = useLinking(containerRef);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-});
+//   // Load any resources or data that we need prior to rendering the app
+//   React.useEffect(() => {
+//     async function loadResourcesAndDataAsync() {
+//       try {
+//         SplashScreen.preventAutoHide();
+
+//         // Load our initial navigation state
+//         setInitialNavigationState(await getInitialState());
+
+//         // Load fonts
+//         await Font.loadAsync({
+//           ...Ionicons.font,
+//           'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
+//         });
+//       } catch (e) {
+//         // We might want to provide this error information to an error reporting service
+//         console.warn(e);
+//       } finally {
+//         setLoadingComplete(true);
+//         SplashScreen.hide();
+//       }
+//     }
+
+//     loadResourcesAndDataAsync();
+//   }, []);
+
+//   if (!isLoadingComplete && !props.skipLoadingScreen) {
+//     return null;
+//   } else {
+//     return (
+//       <View style={styles.container}>
+//         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+//         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
+//           <Stack.Navigator>
+//             <Stack.Screen name="Root" component={BottomTabNavigator} />
+//           </Stack.Navigator>
+//         </NavigationContainer>
+//       </View>
+//     );
+//   }
+// }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#fff',
+//   },
+// });
