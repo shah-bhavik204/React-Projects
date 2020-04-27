@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -6,9 +6,12 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
+import TextField from '@material-ui/core/TextField';
 import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import { View } from 'react-native';
@@ -20,7 +23,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: 345,
+    // maxWidth: 345,
   },
   media: {
     height: 0,
@@ -41,14 +44,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// class Product extends React(){
+//     constructor(props) {
+//         super(props);
+//         this.state = {
+//             comment:'',
+//             comments: [] 
+//         }
+//     }
+// }
+
 export default function Product({ route, navigation }) {
+  const [comment,setComment] = useState('');
+  const [comments,addComment] = useState([]);
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
+  
+  const renderComments = () =>{
+      return comments.map(c=>{
+        return (
+        <Typography variant={"subtitle1"} key={c}>{c}</Typography>
+        )
+      });
+  }
   const {title} = route.params;
   const {img} = route.params;
   const {price} = route.params;
@@ -77,6 +99,44 @@ export default function Product({ route, navigation }) {
         title="Paella dish"
         />
       <CardContent>
+
+        {/* Comment Section */}
+        <div style={{padding: 5}}>
+        <TextField
+          id="outlined-full-width"
+          label="Comment"
+          style={{ margin: 8, width: '90%' }}
+          placeholder="Add Comment"
+          value={comment}
+          onChange={e => setComment(e.target.value)}
+          multiline
+          margin="normal"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        <Button 
+            style={{marginLeft: 10}}
+            variant="contained" 
+            color="primary"
+            onClick={()=> { 
+                addComment(comments.concat(comment))
+                console.log(comments)
+             }}>
+            Send
+        </Button>   
+        {
+            comments.map((c,i) => {
+                return (
+                    <Paper elevation={3} key={i} style={{margin: 10, background: 'gainsboro'}}>
+                        <Typography style={{padding: 5}} variant={"subtitle1"}>{c}</Typography>
+                    </Paper>
+                )
+            })
+        }
+    </div>
+
         <Typography variant="body2" color="textSecondary" component="p">
           {disc}
         </Typography>
@@ -92,14 +152,16 @@ export default function Product({ route, navigation }) {
           className={clsx(classes.expand, {
               [classes.expandOpen]: expanded,
             })}
-            onClick={handleExpandClick}
+            // onClick={handleExpandClick}
             aria-expanded={expanded}
             aria-label="show more"
             >
           {/* <ExpandMoreIcon /> */}
         </IconButton>
       </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+    
+
+      {/* <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography paragraph>Method:</Typography>
           <Typography paragraph>
@@ -125,7 +187,7 @@ export default function Product({ route, navigation }) {
             Set aside off of the heat to let rest for 10 minutes, and then serve.
           </Typography>
         </CardContent>
-      </Collapse>
+      </Collapse> */}
     </Card>
     </View>
   );
